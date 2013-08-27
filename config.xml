@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://yourdomain/NyanCat" version="1.0.0" viewmodes="maximized">
+    <!-- 
     <tizen:application id="sCmKT8K3E4.NYAN" package="sCmKT8K3E4" required_version="2.1"/>
+	-->
     <content src="index.html"/>
     <icon src="icon.png"/>
     <name>NYAN</name>
-    <description>NYAN cat game by phonegap</description>
+    <description>NYAN cat game for Android by phonegap</description>
+    <!-- 
+
     <tizen:privilege name="http://tizen.org/privilege/application.launch"/>
     <tizen:setting screen-orientation="landscape" context-menu="enable" background-support="disable" encryption="disable" install-location="auto"/>
+    -->
 	<preference name="orientation" value="landscape" />
+	<preference name="fullscreen" value="true" />
 </widget>

@@ -93,7 +93,7 @@ function preload() {
 	canvas = document.getElementById("canvas");
 	stage = new createjs.Stage(canvas);
 	
-	imgCat.src = "assets/images/nyancat_spirte.png";
+	imgCat.src = "file:///android_asset/assets/images/nyancat_spirte.png";
 	
 	// create spritesheet and assign the associated data.
 	var spriteSheet = new createjs.SpriteSheet({
@@ -124,7 +124,7 @@ function preload() {
 
 	canvas.setAttribute("width", window.innerWidth);
 	canvas.setAttribute("height", window.innerHeight);
-	canvas.style.backgroundImage = "url('assets/images/cat_background.png')";
+	canvas.style.backgroundImage = "url('file:///android_asset/assets/images/cat_background.png')";
 	//console.log(canvas.getAttribute("width")+" "+canvas.getAttribute("height"));
 	//console.log(window.innerWidth+" "+window.innerHeight);
 	createjs.Touch.enable(stage);
@@ -155,9 +155,9 @@ function preload() {
 	document.addEventListener("webkitvisibilitychange", stateChanged);
 	
 	queue.addEventListener("complete", init);
-	queue.loadManifest([{id:"backgroundMusic", src:"assets/nyancat.mp3|assets/nyancat.ogg"},
-	                    {id:"startMusic", src:"assets/start.mp3|assets/start.ogg"},
-	                    {id:"gameOverMusic", src:"assets/gameover.mp3|assets/gameover.ogg"}]);
+	queue.loadManifest([{id:"backgroundMusic", src:"file:///android_asset/assets/nyancat.mp3|file:///android_asset/assets/nyancat.ogg"},
+	                    {id:"startMusic", src:"file:///android_asset/assets/start.mp3|file:///android_asset/assets/start.ogg"},
+	                    {id:"gameOverMusic", src:"file:///android_asset/assets/gameover.mp3|file:///android_asset/assets/gameover.ogg"}]);
 	
 	//queue.loadFile({id:"backgroundMusic", src:"assets/nyancat.mp3|assets/nyancat.ogg"});
 }
