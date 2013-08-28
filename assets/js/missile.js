@@ -54,7 +54,8 @@
 			}
 			bmpAnimation.gotoAndPlay("dead");
 			bgmInstance.stop();
-			createjs.Sound.play("gameOverMusic");
+			//createjs.Sound.play("gameOverMusic");
+			gameOverMusic.play();
 			//alert("Score : "+totalScore+"\nYou Hate Missile ID : "+this.mID+"\nYou lived for "+(Math.round((createjs.Ticker.getTime()-beginTime))/1000)+"s");
 			for(var i=missileArr.length; i>0;i--){
 				stage.removeChild(missileArr[i-1]);

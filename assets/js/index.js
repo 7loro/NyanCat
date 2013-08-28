@@ -23,7 +23,11 @@ var beforeInnerWidth = window.innerWidth;
 var beforeInnerHeight = window.innerHeight;
 var alive=true;
 var isIE;
-var bgmInstance;
+//var bgmInstance;
+var backgroundMusic = new Media("/android_asset/www/assets/nyancat.mp3");
+var gameStartMusic = new Media("/android_asset/www/assets/start.mp3");
+var gameOverMusic = new Media("/android_asset/www/assets/gameover.mp3");
+
 var moveFrom = function() {
 	this.x=0;
 	this.y=0;
@@ -88,8 +92,8 @@ function missileRepaint() {
 
 function preload() {
 	// sound
-	if(!createjs.Sound.initializeDefaultPlugins())
-		alert("We cannot play audio in this browser");
+	//if(!createjs.Sound.initializeDefaultPlugins())
+	//	alert("We cannot play audio in this browser");
 	canvas = document.getElementById("canvas");
 	stage = new createjs.Stage(canvas);
 	
@@ -109,8 +113,8 @@ function preload() {
 	
 	// create a BitmapAnimation instance to display and play back the sprite sheet:
 	bmpAnimation = new createjs.BitmapAnimation(spriteSheet);
-	var queue = new createjs.LoadQueue(true);
-	queue.installPlugin(createjs.Sound);
+	//var queue = new createjs.LoadQueue(true);
+	//queue.installPlugin(createjs.Sound);
 	isIE = (
 			typeof document.getElementById!="undefined" 
 			&& 
@@ -152,16 +156,16 @@ function preload() {
 	hitBox.height = charBox.height*44/70;
 	
 	//Events for visibility
-	document.addEventListener("webkitvisibilitychange", stateChanged);
+	//document.addEventListener("webkitvisibilitychange", stateChanged);
 	
 	queue.addEventListener("complete", init);
-	queue.loadManifest([{id:"backgroundMusic", src:"file:///android_asset/www/assets/nyancat.mp3|file:///android_asset/www/assets/nyancat.ogg"},
-	                    {id:"startMusic", src:"file:///android_asset/www/assets/start.mp3|file:///android_asset/www/assets/start.ogg"},
-	                    {id:"gameOverMusic", src:"file:///android_asset/www/assets/gameover.mp3|file:///android_asset/www/assets/gameover.ogg"}]);
+	//queue.loadManifest([{id:"backgroundMusic", src:"file:///android_asset/www/assets/nyancat.mp3|file:///android_asset/www/assets/nyancat.ogg"},
+	//                    {id:"startMusic", src:"file:///android_asset/www/assets/start.mp3|file:///android_asset/www/assets/start.ogg"},
+	//                    {id:"gameOverMusic", src:"file:///android_asset/www/assets/gameover.mp3|file:///android_asset/www/assets/gameover.ogg"}]);
 	
 	//queue.loadFile({id:"backgroundMusic", src:"assets/nyancat.mp3|assets/nyancat.ogg"});
 }
-
+/*
 function stateChanged() {
 	if(document.webkitHidden)
 		stopSound();
@@ -170,16 +174,18 @@ function stateChanged() {
 }
 
 function playSound() {
-	bgmInstance.resume();
+	//bgmInstance.resume();
+	backgroundMusic.play();
 }
 
 function stopSound() {
-	bgmInstance.pause();
+	//bgmInstance.pause();
+	backgroundMusic.pause();
 }
-
+*/
 function init() {
-	bgmInstance = createjs.Sound.play("backgroundMusic");
-	
+	//bgmInstance = createjs.Sound.play("backgroundMusic");
+	backgroundMusic.play();
 	// 게임 시작 전에 제목 표시해주고 할 때 캐릭터 위, 수정필요하다.
 
 	textScore = new createjs.Text("Score", stage.canvas.height/30+"px Arial", "white");
@@ -251,8 +257,8 @@ function mDownBeforeCountDown() {
 
 function countDown() {
 	createjs.Ticker.removeEventListener("tick", moveAroundTitle);
-	if(bgmInstance.playState == "playFinished")
-		bgmInstance.play();
+	//if(bgmInstance.playState == "playFinished")
+	//	bgmInstance.play();
 	
 	stage.removeAllEventListeners();
 	
@@ -298,7 +304,9 @@ function countDown() {
 	stage.addChild(textScore);
 	stage.addEventListener("stagemousedown", mDown);
 	stage.addEventListener("stagemouseup", mUp);
-	createjs.Sound.play("startMusic");
+	//createjs.Sound.play("startMusic");
+	gameStartMusic.play();
+	backgroundMusic.play();
 	createjs.Ticker.addEventListener("tick", game);
 	//stage.removeChild(textCountDown);
 }
