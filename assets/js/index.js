@@ -24,9 +24,9 @@ var beforeInnerHeight = window.innerHeight;
 var alive=true;
 var isIE;
 //var bgmInstance;
-var backgroundMusic = new Media("/android_asset/www/assets/nyancat.mp3");
-var gameStartMusic = new Media("/android_asset/www/assets/start.mp3");
-var gameOverMusic = new Media("/android_asset/www/assets/gameover.mp3");
+var backgroundMusic;
+var gameStartMusic;
+var gameOverMusic;
 
 var moveFrom = function() {
 	this.x=0;
@@ -98,7 +98,10 @@ function preload() {
 	stage = new createjs.Stage(canvas);
 	
 	imgCat.src = "file:///android_asset/www/assets/images/nyancat_spirte.png";
-	
+	backgroundMusic = new Media("/android_asset/www/assets/nyancat.mp3");
+	gameStartMusic = new Media("/android_asset/www/assets/start.mp3");
+	gameOverMusic = new Media("/android_asset/www/assets/gameover.mp3");
+
 	// create spritesheet and assign the associated data.
 	var spriteSheet = new createjs.SpriteSheet({
 		// image to use
