@@ -52,10 +52,12 @@
 			if(createjs.Ticker.hasEventListener("tick")){
 				createjs.Ticker.removeEventListener("tick", game);
 			}
+			
 			bmpAnimation.gotoAndPlay("dead");
-			bgmInstance.stop();
-			//createjs.Sound.play("gameOverMusic");
-			gameOverMusic.play();
+			backgroundMusic.pause();
+			backgroundMusic.playState = "onPause";
+			gameOverMusic = createjs.Sound.play("gameOverMusic");
+			
 			//alert("Score : "+totalScore+"\nYou Hate Missile ID : "+this.mID+"\nYou lived for "+(Math.round((createjs.Ticker.getTime()-beginTime))/1000)+"s");
 			for(var i=missileArr.length; i>0;i--){
 				stage.removeChild(missileArr[i-1]);
@@ -67,9 +69,10 @@
 			textResult.x = 0-textResult.getMeasuredWidth()/3;
 			stage.addChild(textResult);
 			stage.removeAllEventListeners();
-			//	createjs.Sound.stop();
-			console.log("game over");
+			
+			// console.log("game over");
 			stage.addEventListener("stagemousedown", tryAgainMDown);
+			//canvas.addEventListener("mousedown", tryAgainMDown);
 			createjs.Ticker.addEventListener("tick", gameOverTick);
 		}
 		//}

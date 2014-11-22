@@ -23,9 +23,8 @@ var beforeInnerWidth = window.innerWidth;
 var beforeInnerHeight = window.innerHeight;
 var alive=true;
 var isIE;
-//var bgmInstance;
+var bgmInstance;
 var backgroundMusic;
-var gameStartMusic;
 var gameOverMusic;
 
 var moveFrom = function() {
@@ -97,11 +96,8 @@ function preload() {
 	canvas = document.getElementById("canvas");
 	stage = new createjs.Stage(canvas);
 	
-	imgCat.src = "file:///android_asset/www/assets/images/nyancat_spirte.png";
-	backgroundMusic = new Media("/android_asset/www/assets/nyancat.mp3");
-	gameStartMusic = new Media("/android_asset/www/assets/start.mp3");
-	gameOverMusic = new Media("/android_asset/www/assets/gameover.mp3");
-
+	imgCat.src = "assets/images/nyancat_spirte.png";
+	
 	// create spritesheet and assign the associated data.
 	var spriteSheet = new createjs.SpriteSheet({
 		// image to use
@@ -109,15 +105,16 @@ function preload() {
 		// width, height & registration point of each sprite
 		frames: {width: 100, height: 70}, 
 		animations: {    
-			fly: [0, 5, "fly", 4],
-			dead: [0, 7, "dead", 6]
+			fly: [0, 5, "fly", 0.2],
+			dead: [0, 7, "dead", 0.2]
 		}
 	});
 	
 	// create a BitmapAnimation instance to display and play back the sprite sheet:
 	bmpAnimation = new createjs.BitmapAnimation(spriteSheet);
-	//var queue = new createjs.LoadQueue(true);
-	//queue.installPlugin(createjs.Sound);
+	var queue = new createjs.LoadQueue(true);
+	queue.installPlugin(createjs.Sound);
+
 	isIE = (
 			typeof document.getElementById!="undefined" 
 			&& 
@@ -131,7 +128,7 @@ function preload() {
 
 	canvas.setAttribute("width", window.innerWidth);
 	canvas.setAttribute("height", window.innerHeight);
-	canvas.style.backgroundImage = "url('file:///android_asset/www/assets/images/cat_background.png')";
+	canvas.style.backgroundImage = "url('assets/images/cat_background.png')";
 	//console.log(canvas.getAttribute("width")+" "+canvas.getAttribute("height"));
 	//console.log(window.innerWidth+" "+window.innerHeight);
 	createjs.Touch.enable(stage);
@@ -162,35 +159,38 @@ function preload() {
 	//document.addEventListener("webkitvisibilitychange", stateChanged);
 	
 	queue.addEventListener("complete", init);
-	//queue.loadManifest([{id:"backgroundMusic", src:"file:///android_asset/www/assets/nyancat.mp3|file:///android_asset/www/assets/nyancat.ogg"},
-	//                    {id:"startMusic", src:"file:///android_asset/www/assets/start.mp3|file:///android_asset/www/assets/start.ogg"},
-	//                    {id:"gameOverMusic", src:"file:///android_asset/www/assets/gameover.mp3|file:///android_asset/www/assets/gameover.ogg"}]);
+	queue.loadManifest([{id:"backgroundMusic", src:"assets/nyancat.mp3|assets/nyancat.ogg"},
+	                   {id:"startMusic", src:"assets/start.mp3|assets/start.ogg"},
+	                   {id:"gameOverMusic", src:"assets/gameover.mp3|assets/gameover.ogg"}]);
 	
-	//queue.loadFile({id:"backgroundMusic", src:"assets/nyancat.mp3|assets/nyancat.ogg"});
 }
 /*
-function stateChanged() {
-	if(document.webkitHidden)
-		stopSound();
-	else
-		playSound();
-}
-
 function playSound() {
 	//bgmInstance.resume();
-	backgroundMusic.play();
+	backgroundMusic.resume();
 }
 
 function stopSound() {
-	//bgmInstance.pause();
+	bgmInstance.pause();
 	backgroundMusic.pause();
+}
+
+function stateChanged() {
+	if(document.webkitHidden){
+		alert("stop");
+		stopSound();
+	}
+	else{
+		alert("resume");
+		playSound();
+	}
 }
 */
 function init() {
-	//bgmInstance = createjs.Sound.play("backgroundMusic");
-	backgroundMusic.play();
+	backgroundMusic = createjs.Sound.play("backgroundMusic");
+	//backgroundMusic.play();
 	// 게임 시작 전에 제목 표시해주고 할 때 캐릭터 위, 수정필요하다.
-
+	
 	textScore = new createjs.Text("Score", stage.canvas.height/30+"px Arial", "white");
 	textTitle = new createjs.Text("NYAN", stage.canvas.height/2.5+"px Arial", "white");
 	textTitle.textAlign = "center";
@@ -211,7 +211,7 @@ function init() {
 	
 	bmpAnimation.x=textTitle.x-(textTitle.getMeasuredWidth()/2);
 	bmpAnimation.y=textTitle.y-charBox.height/2;
-	console.log("stage w : "+stage.canvas.width);
+	
 	//bmpAnimation.x = bmpAnimation.x*document.getElementById("canvas").getAttribute("width")/beforeInnerWidth-100;
 	//bmpAnimation.y = bmpAnimation.y*document.getElementById("canvas").getAttribute("height")/beforeInnerHeight;
 	
@@ -236,6 +236,8 @@ function init() {
 	//stage.addChild(hitboxRect);
 	
 	stage.addEventListener("stagemousedown", mDownBeforeCountDown);
+
+	//canvas.addEventListener("click",mDownBeforeCountDown);
 }
 
 
@@ -255,7 +257,10 @@ function moveAroundTitle() {
 
 function mDownBeforeCountDown() {
 	stage.removeEventListener("stagemousedown", mDownBeforeCountDown);
+	//canvas.removeEventListener("mousedown", mDownBeforeCountDown);
+
 	stage.addEventListener("stagemouseup", countDown);
+	//canvas.addEventListener("mouseup", countDown);
 }
 
 function countDown() {
@@ -263,7 +268,9 @@ function countDown() {
 	//if(bgmInstance.playState == "playFinished")
 	//	bgmInstance.play();
 	
+	
 	stage.removeAllEventListeners();
+	//canvas.removeEventListener("mouseup", countDown);
 	
 	varInitialize();
 	
@@ -307,9 +314,11 @@ function countDown() {
 	stage.addChild(textScore);
 	stage.addEventListener("stagemousedown", mDown);
 	stage.addEventListener("stagemouseup", mUp);
+	//canvas.addEventListener("stagemousedown",mDown);
+	//canvas.addEventListener("stagemouseup",mUp);
 	//createjs.Sound.play("startMusic");
-	gameStartMusic.play();
-	backgroundMusic.play();
+	//gameStartMusic.play();
+	//backgroundMusic.play();
 	createjs.Ticker.addEventListener("tick", game);
 	//stage.removeChild(textCountDown);
 }
@@ -353,10 +362,16 @@ function game() {
 		missileArr.push(new missile(totalMissile));
 		stage.addChild(missileArr[0]);
 		totalMissile++;
+		createjs.Sound.play("startMusic");
 	}
 
 	textScore.text = "SCORE : " + totalScore+"\nLevel : "+tenLv+"\n"+formatAfterPoint(((Math.round((createjs.Ticker.getTime()-beginTime))/1000)+''),3)+"s"
 								+"\n"+ Math.round(createjs.Ticker.getMeasuredFPS())+"fps"; 
+
+	if(backgroundMusic.playState == "onPause"){
+		backgroundMusic.playState = "playSucceeded";
+		backgroundMusic.resume();
+	}
 	
 
 	if(isMDown){
@@ -401,8 +416,10 @@ function game() {
 
 function tryAgainMDown() {
 	stage.removeEventListener("stagemousedown", tryAgainMDown);
+	//canvas.removeEventListener("mousedown", tryAgainMDown);
 	createjs.Ticker.removeEventListener("tick", gameOverTick);
 	stage.addEventListener("stagemouseup", countDown);
+	//canvas.addEventListener("mouseup", countDown);
 }
 
 function gameOverTick() {
